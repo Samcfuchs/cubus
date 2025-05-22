@@ -145,6 +145,15 @@ export class Board {
     this.pickedBlock = null;
   }
 
+  commitBlock() {
+    if (!this.pickedBlock) return;
+
+    this.addBlock(this.pickedBlock);
+    this.pickedBlock = null;
+    this.hoveredBlock = null;
+    this.updateSpaces();
+  }
+
   handleClick() {
     // Empty clicks reset.
     if (!this.hoveredBlock) {

@@ -78,7 +78,7 @@ let updateZView: () => void;
 
 export function initScene() {
   const mount = document.getElementById('app') as HTMLDivElement;
-  gui = new GUI( {container: document.getElementById('gui_container')!, title: "Configuration"} );
+  gui = new GUI({ container: document.getElementById('gui_container')!, title: "Configuration" });
 
   scene = new THREE.Scene();
 
@@ -114,7 +114,7 @@ export function initScene() {
   controls.maxDistance = 100;
   controls.mouseButtons = { RIGHT: THREE.MOUSE.ROTATE, MIDDLE: null }
   controls.listenToKeyEvents(window);
-  controls.target = BOARD_ORIGIN.clone().add(new THREE.Vector3(0,.7,0));
+  controls.target = BOARD_ORIGIN.clone().add(new THREE.Vector3(0, .7, 0));
 
   controls.update(.01);
 
@@ -282,6 +282,11 @@ function click() {
   updateViews();
 }
 document.getElementById('app')!.onclick = click;
+
+document.getElementById('add_cube')!.onclick = () => {
+  board.commitBlock();
+  updateViews();
+}
 
 /*
  
