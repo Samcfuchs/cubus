@@ -207,6 +207,7 @@ document.getElementById('flip')!.onclick = invertFlip;
 function click() {
   if (board.pickedBlock) {
     board.addBlock(board.pickedBlock);
+    board.pickedBlock = null;
   }
 }
 document.getElementById('app')!.onclick = click;

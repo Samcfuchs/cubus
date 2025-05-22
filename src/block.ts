@@ -110,10 +110,8 @@ export class Block extends THREE.Object3D {
       //this.add(this.mesh);
       this.mesh.material = material;
       this.meshVisible = true;
-      console.debug("Added mesh");
       return;
     } else if (!state) {
-      console.debug("removed mesh");
       //this.remove(this.mesh);
       this.mesh.material = emptyMaterial;
       this.meshVisible = false;
@@ -145,10 +143,8 @@ export class Block extends THREE.Object3D {
   normalQuat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(1,1,1).normalize(), new THREE.Vector3(1,1,1).normalize());
   setRotation(orientation: number, flip?: boolean) {
     flip = flip ?? false;
-    console.log("rotate", orientation)
 
     if (flip) {
-      console.log("bum rotate", orientation)
       this.mesh.setRotationFromQuaternion(this.flipQuat);
     } else {
       this.mesh.setRotationFromQuaternion(this.normalQuat);
@@ -162,11 +158,5 @@ export class Block extends THREE.Object3D {
   incrementRotation(rate?: number) {
     rate = rate ?? 1;
     this.mesh.rotateOnAxis(new THREE.Vector3(1, 1, 1).normalize(), Math.PI / 3 * 2 * rate);
-    //this.mesh.rotateOnAxis(new THREE.Vector3(1,1,1), Math.PI / 3);
-    //this.mesh.rotateOnWorldAxis(new THREE.Vector3(1,1,1), Math.PI * 2 / 3)
-    //this.geometry.rotateOnAxis(new THREE.Vector3(1,1,1), Math.PI / 3 * rate);
-    //this.geometry.rotateX(Math.PI / 3 * rate);
-    //this.mesh.rotateX(Math.PI / 3 * rate);
-    //this.mesh.rotate
   }
 }
