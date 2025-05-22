@@ -4,18 +4,37 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Cubus</title>
   </head>
   <body>
     <div class="flex">
-      <div id="app"></div>
+      <div id="views">
+        <div id="view_x"></div>
+        <div id="view_y"></div>
+        <div id="view_z"></div>
+      </div>
+      <div id="app">
+        <div id="gui_container"></div>
+      </div>
       <div id="controls">
         <button id="add_cube">Add a cube</button>
         <button id="rotate_left">&lt;</button>
         <button id="rotate_right">&gt;</button>
-        <button id="flip">^</button>
-
+        <button id="flip">Invert cube</button>
       </div>
+      <!--
+      <div id="config">
+        <h2>Scene configuration</h2>
+        <label for="fill_intensity">Fill light intensity</label>
+          <input type="range" min="0" max="10" value="1" step="0.05" class="slider" id="fill_intensity">
+          <br>
+        <label for="key_intensity">Key light intensity</label>
+          <input type="range" min="0" max="10" value="1" step="0.05" class="slider" id="key_intensity">
+          <br>
+        <label for="rim_intensity">Rim light intensity</label>
+          <input type="range" min="0" max="10" value="1" step="0.05" class="slider" id="rim_intensity">
+      </div>
+    -->
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -93,7 +93,6 @@ export class Block extends THREE.Object3D {
       //this.add(this.mesh);
       this.mesh.material = tentativeMat;
       this.tentativeVisible = true;
-      console.debug("Added mesh");
     } else if (!state) {
       this.mesh.material = emptyMaterial;
       this.tentativeVisible = false;
