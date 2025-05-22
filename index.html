@@ -1,41 +1,50 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cubus</title>
-  </head>
-  <body>
-    <div class="flex">
-      <div id="views">
-        <div id="view_x"></div>
-        <div id="view_y"></div>
-        <div id="view_z"></div>
-      </div>
-      <div id="app">
-        <div id="gui_container"></div>
-      </div>
-      <div id="controls">
-        <button id="add_cube">Add a cube</button>
-        <button id="rotate_left">&lt;</button>
-        <button id="rotate_right">&gt;</button>
-        <button id="flip">Invert cube</button>
-      </div>
-      <!--
-      <div id="config">
-        <h2>Scene configuration</h2>
-        <label for="fill_intensity">Fill light intensity</label>
-          <input type="range" min="0" max="10" value="1" step="0.05" class="slider" id="fill_intensity">
-          <br>
-        <label for="key_intensity">Key light intensity</label>
-          <input type="range" min="0" max="10" value="1" step="0.05" class="slider" id="key_intensity">
-          <br>
-        <label for="rim_intensity">Rim light intensity</label>
-          <input type="range" min="0" max="10" value="1" step="0.05" class="slider" id="rim_intensity">
-      </div>
-    -->
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cubus</title>
+</head>
+
+<body>
+  <div id="help">
+    <h1>Cubus</h1>
+    <button class='button' onClick="this.parentElement.style = 'display: none'">
+      <svg class='x-symbol' alt="Exit" viewBox="0 0 100 100">
+        <line x1="0" y1="0" x2="100" y2="100"></line>
+        <line x1="100" y1="0" x2="0" y2="100"></line>
+      </svg>
+    </button>
+    <p>
+      This is a version of a game I learned from a friend. You and your
+      opponent will take turns placing cubes on the board in any orientation.
+      You win by connecting four faces of your color in a straight line on
+      <em>any</em> of the three isometric views. Blocks cannot be removed once
+      they are placed. Click once to test a placement, then click again to
+      commit to it. Use the scroll wheel or arrow buttons to adjust the cube's
+      orientation. Have fun!
+    </p>
+  </div>
+  <div class="flex">
+    <div id="views">
+      <div id="view_x"></div>
+      <div id="view_y"></div>
+      <div id="view_z"></div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <div id="app">
+      <div id="gui_container"></div>
+    </div>
+    <div id="controls">
+      <button id="add_cube">Add a cube</button>
+      <button id="rotate_left">&lt;</button>
+      <button id="rotate_right">&gt;</button>
+      <button id="flip">Invert cube</button>
+      <button id="info" onClick="document.getElementById('help').style='display:block'">Info</button>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
