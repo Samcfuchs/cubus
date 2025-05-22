@@ -7,16 +7,18 @@ import { Board } from './board.ts';
 
 const ORIGIN = new THREE.Vector3(0, 0, 0);
 const BOARD_ORIGIN = new THREE.Vector3(0, 1, 0);
-let targetBlock: Block;
 
-function putCube(pos: THREE.Vector3, size?: number): THREE.Mesh {
-  size = size ?? 1;
-  const geometry = new THREE.BoxGeometry(size, size, size);
-  const material = new THREE.MeshNormalMaterial();
-  const cube = new THREE.Mesh(geometry, material);
-  cube.position.set(pos.x, pos.y, pos.z);
-  return cube;
-}
+/*
+ 
+ ██╗   ██╗████████╗██╗██╗     
+ ██║   ██║╚══██╔══╝██║██║     
+ ██║   ██║   ██║   ██║██║     
+ ██║   ██║   ██║   ██║██║     
+ ╚██████╔╝   ██║   ██║███████╗
+  ╚═════╝    ╚═╝   ╚═╝╚══════╝
+                              
+ 
+*/
 
 function drawLine(a: THREE.Vector3, b: THREE.Vector3, color?: any) {
   const geometry = new THREE.BufferGeometry().setFromPoints([a, b])
@@ -35,6 +37,10 @@ function drawCubeSystem() {
   cube_group.add(z_line);
 
   return cube_group;
+}
+
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m;
 }
 
 let scene: THREE.Scene;
@@ -57,6 +63,18 @@ let gui: GUI;
 let updateXView: () => void;
 let updateYView: () => void;
 let updateZView: () => void;
+
+/*
+ 
+ ██╗███╗   ██╗██╗████████╗
+ ██║████╗  ██║██║╚══██╔══╝
+ ██║██╔██╗ ██║██║   ██║   
+ ██║██║╚██╗██║██║   ██║   
+ ██║██║ ╚████║██║   ██║   
+ ╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   
+                          
+ 
+*/
 
 export function initScene() {
   const mount = document.getElementById('app') as HTMLDivElement;
@@ -195,31 +213,17 @@ function createBoard() {
   scene.add(groundMesh);
 }
 
-function addCubes() {
-
-  for (let x = -3; x < 3; x++) {
-    for (let y = -3; y < 3; y++) {
-      for (let z = -3; z < 3; z++) {
-        if (x + y + z == 1 && Math.random() > 0.6) {
-          let block = new Block(new THREE.Vector3(x, y, z))
-          cube_group.add(block);
-          //cube_group.add(block.wire_mesh);
-        }
-        if (x + y + z == 2 && Math.random() > 0.8) {
-          let block = new Block(new THREE.Vector3(x, y, z))
-          block.incrementRotation();
-          cube_group.add(block);
-          //cube_group.add(block.wire_mesh);
-        }
-      }
-    }
-  }
-
-  targetBlock = new Block(new THREE.Vector3(2, 2, 2));
-  cube_group.add(targetBlock);
-
-  scene.add(cube_group);
-}
+/*
+ 
+ ██╗███╗   ██╗████████╗███████╗██████╗  █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+ ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+ ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝███████║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+ ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+ ██║██║ ╚████║   ██║   ███████╗██║  ██║██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+ ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+                                                                                              
+ 
+*/
 
 document.addEventListener('mousemove', onDocumentMouseMove, false);
 function onDocumentMouseMove(event: MouseEvent) {
@@ -233,10 +237,7 @@ function onDocumentMouseMove(event: MouseEvent) {
   board.placementRotation = clientRotation;
   board.raycastAvailableSpace(raycaster);
   updateRotation();
-
-  console.debug(board);
 }
-
 
 document.addEventListener('wheel', onScroll)
 function onScroll(event: WheelEvent) {
@@ -246,10 +247,6 @@ function onScroll(event: WheelEvent) {
   else {
     rotateCCW();
   }
-}
-
-function mod(n: number, m: number) {
-  return ((n % m) + m) % m;
 }
 
 let ticks = 0;
@@ -268,24 +265,35 @@ function rotateCCW() {
 document.getElementById('rotate_left')!.onclick = rotateCCW;
 
 function updateRotation() {
-  board.pickedBlock?.setRotation(mod(ticks, 6), invert);
+  board.placementRotation = mod(ticks, 6);
+  board.placementInversion = invert;
+  board.pickedBlock && board.applyPlacementTransform(board.pickedBlock);
 }
 
 function invertFlip() {
   console.log("inverted:", invert)
   invert = !invert;
+  updateRotation();
 }
 document.getElementById('flip')!.onclick = invertFlip;
 
 function click() {
-  if (board.pickedBlock) {
-    board.addBlock(board.pickedBlock);
-    board.pickedBlock = null;
-    board.updateSpaces();
-  }
+  board.handleClick();
   updateViews();
 }
 document.getElementById('app')!.onclick = click;
+
+/*
+ 
+ ██╗      ██████╗  ██████╗ ██████╗ 
+ ██║     ██╔═══██╗██╔═══██╗██╔══██╗
+ ██║     ██║   ██║██║   ██║██████╔╝
+ ██║     ██║   ██║██║   ██║██╔═══╝ 
+ ███████╗╚██████╔╝╚██████╔╝██║     
+ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝     
+                                   
+ 
+*/
 
 function animate() {
   requestAnimationFrame(animate);

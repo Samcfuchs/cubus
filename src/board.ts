@@ -13,6 +13,7 @@ export class Board {
 
   size: number = 4;
   placementRotation: number = 0;
+  placementInversion: boolean = false;
 
 
   constructor(s: THREE.Scene) {
@@ -128,6 +129,48 @@ export class Board {
     console.info("Recalculates spaces");
   }
 
+  selectBlock(b: Block) {
+    // Unselect an existing picked block
+    this.pickedBlock && this.pickedBlock.setTentative(false);
+
+    // set the picked block so that it can be tested/modified
+    b.setTentative(true);
+    b.setRotation(this.placementRotation);
+    this.pickedBlock = b;
+
+  }
+
+  unselectBlock() {
+    this.pickedBlock?.setTentative(false);
+    this.pickedBlock = null;
+  }
+
+  handleClick() {
+    // Empty clicks reset.
+    if (!this.hoveredBlock) {
+      this.unselectBlock();
+      return;
+    }
+    // Hovered block exists
+    // Commits the block
+    if (this.hoveredBlock == this.pickedBlock) {
+      this.addBlock(this.pickedBlock);
+      this.pickedBlock = null;
+      this.hoveredBlock = null;
+      this.updateSpaces();
+    // change the selected block
+    } else {
+      this.unselectBlock();
+      this.selectBlock(this.hoveredBlock);
+    }
+    //this.updateSpaces();
+  }
+
+  applyPlacementTransform(b: Block) {
+    b.setRotation(this.placementRotation, this.placementInversion);
+  }
+
+  hoveredBlock: Block | null = null;
   pickedBlock: Block | null = null;
 
   raycastAvailableSpace(raycaster: THREE.Raycaster, orientation?: number) {
@@ -145,26 +188,23 @@ export class Board {
 
 
       if (intersectedObject instanceof Block) {
-        if (this.pickedBlock !== intersectedObject) {
-          this.pickedBlock?.setOutline(false);
+        if (this.hoveredBlock !== intersectedObject) {
+          this.hoveredBlock?.setOutline(false);
           intersectedObject.setOutline(true);
 
-          this.pickedBlock?.setTentative(false);
-          intersectedObject.setTentative(true);
-
-          this.pickedBlock?.setRotation(0);
+          this.hoveredBlock?.setRotation(0);
           intersectedObject.setRotation(this.placementRotation);
 
-          this.pickedBlock = intersectedObject;
+          this.hoveredBlock = intersectedObject;
         }
         return;
       }
     }
-    if (this.pickedBlock) {
-      this.pickedBlock.setOutline(false);
-      this.pickedBlock.setRotation(0);
-      this.pickedBlock.setTentative(false);
-      this.pickedBlock = null;
+    if (this.hoveredBlock) {
+      this.hoveredBlock.setOutline(false);
+      this.hoveredBlock.setRotation(0);
+      //this.pickedBlock.setTentative(false);
+      this.hoveredBlock = null;
     }
         
   }
