@@ -3,7 +3,7 @@ import { Block } from './block';
 
 export class Board {
 
-  placedBlocks: Block[];
+  // placedBlocks: Block[];
   //placedPositions: [number,number,number][];
   placedPositions: Set<number>;
   blocks: THREE.Group;
@@ -16,7 +16,7 @@ export class Board {
 
 
   constructor(s: THREE.Scene) {
-    this.placedBlocks = []
+    // this.placedBlocks = []
     this.placedPositions = new Set();
     this.spacesAvailable = new Set();
     this.scene = s;
@@ -65,16 +65,6 @@ export class Board {
 
   }
 
-
-  createBlock(x: number, y: number, z: number) {
-
-
-    let b = new Block(new THREE.Vector3(x, y, z));
-    this.addBlock(b);
-
-    return b;
-  }
-
   addBlock(b: Block) {
     let pos : [number, number, number] = [b.position.x,b.position.y,b.position.z]
 
@@ -88,11 +78,11 @@ export class Board {
 
     b.setVisible(true);
     this.blocks.add(b);
-    this.placedBlocks.push(b);
     this.placedPositions.add(this.keyCoords(...pos));
     this.candidateBlocks.remove(b);
+    this.spacesAvailable.delete(this.keyCoords(...pos));
 
-    this.updateSpaces();
+    //this.updateSpaces();
 
   }
 
@@ -111,7 +101,8 @@ export class Board {
   }
 
   updateSpaces() {
-    console.log(this);
+    this.candidateBlocks.clear()
+    this.spacesAvailable.clear();
     this.iterateLayer((x,y,z) => {
       // Skip lower layers
       if (x+y+z <=1) return;
@@ -126,7 +117,7 @@ export class Board {
       if (!this.checkPosition(x,y-1,z)) return;
       if (!this.checkPosition(x,y,z-1)) return;
 
-      console.log("Open slot: ", x,y,z);
+      // console.log("Open slot: ", x,y,z);
 
       let b = new Block(new THREE.Vector3(x,y,z), false);
       this.spacesAvailable.add(this.keyCoords(x,y,z));
@@ -134,6 +125,7 @@ export class Board {
 
 
     });
+    console.info("Recalculates spaces");
   }
 
   pickedBlock: Block | null = null;

@@ -95,7 +95,6 @@ export class Block extends THREE.Object3D {
       this.tentativeVisible = true;
       console.debug("Added mesh");
     } else if (!state) {
-      console.debug("removed mesh");
       this.mesh.material = emptyMaterial;
       this.tentativeVisible = false;
     }
@@ -125,10 +124,8 @@ export class Block extends THREE.Object3D {
     if (state) {
       this.add(this.wire_mesh);
       this.outlineVisible = true;
-      console.debug("Added outline");
       return;
     } else if (!state) {
-      console.debug("removed outline");
       this.remove(this.wire_mesh);
       this.outlineVisible = false;
     }

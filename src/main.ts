@@ -170,7 +170,6 @@ function onScroll(event: WheelEvent){
     rotateCW();
   }
   else {
-    console.log(clientRotation);
     rotateCCW();
   }
 }
@@ -208,6 +207,7 @@ function click() {
   if (board.pickedBlock) {
     board.addBlock(board.pickedBlock);
     board.pickedBlock = null;
+    board.updateSpaces();
   }
 }
 document.getElementById('app')!.onclick = click;
