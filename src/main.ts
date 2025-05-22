@@ -70,11 +70,8 @@ export function initScene() {
   renderer.shadowMap.enabled = true;
   mount.appendChild(renderer.domElement);
 
-  console.log("mounted");
-
-
   camera = new THREE.PerspectiveCamera(5, mount.clientWidth / mount.clientHeight);
-  camera.position.set(0, 100, 0)
+  camera.position.set(0, 100, 100)
   camera.up.set(CAMERA_UP.x, CAMERA_UP.y, CAMERA_UP.z);
 
   camera.lookAt(BOARD_ORIGIN);
@@ -83,6 +80,7 @@ export function initScene() {
   window.addEventListener('resize', () => {
     camera.aspect = mount.clientWidth / mount.clientHeight;
     camera.updateProjectionMatrix();
+    controls.enableZoom = mount.clientWidth < 600;
 
     renderer.setSize(mount.clientWidth, mount.clientHeight);
   });
@@ -93,8 +91,12 @@ export function initScene() {
   controls.minPolarAngle = Math.PI * 0.1;
   controls.enablePan = false;
   controls.enableDamping = true;
-  controls.enableZoom = false;
-  controls.mouseButtons = { RIGHT: THREE.MOUSE.ROTATE }
+  controls.enableZoom = mount.clientWidth < 600;
+  controls.minDistance = 40;
+  controls.maxDistance = 100;
+  controls.mouseButtons = { RIGHT: THREE.MOUSE.ROTATE, MIDDLE: null }
+  controls.listenToKeyEvents(window);
+  controls.target = BOARD_ORIGIN.clone().add(new THREE.Vector3(0,.7,0));
 
   controls.update(.01);
 
