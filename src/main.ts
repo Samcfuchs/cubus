@@ -268,6 +268,7 @@ function updateRotation() {
   board.placementRotation = mod(ticks, 6);
   board.placementInversion = invert;
   board.pickedBlock && board.applyPlacementTransform(board.pickedBlock);
+  updateViews();
 }
 
 function invertFlip() {
